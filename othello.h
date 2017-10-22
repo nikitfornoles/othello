@@ -99,19 +99,21 @@ void printboard () {
 		for (int j = 0; j < length; ++j) {
 			int num = (i*length) + (j+1);
 			if (b.p1_tiles[num] == true) {
-				printf ("\033[33m\033[1m"); //yellow bold
+				printf ("\033[33m\033[1mB"); //yellow bold
 			}
 			else if (b.p2_tiles[num] == true) {
-				printf ("\033[32m\033[1m"); //green bold
+				printf ("\033[32m\033[1mW"); //green bold
 			}
 			else {
-				printf ("\033[0m"); //reset color				
+				printf ("\033[0m"); //reset color
+				printf ("%d", num);		
 			}
-			printf ("%d", num);
 			printf (" ");
-			if ((num / 10) < 1) {
+			if (((num / 10) < 1) && !b.p1_tiles[num] && !b.p2_tiles[num]) {
 				printf(" ");
 			}
+
+			if (b.p1_tiles[num] || b.p2_tiles[num]) {printf(" "); }
 		}
 		printf("\n");
 	}
