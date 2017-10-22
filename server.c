@@ -9,26 +9,6 @@ void die_with_error(char *error_msg) {
 	exit(-1);
 }
 
-int size = 8;
-
-void board_init() {
-	char board[size][size];
-
-	printf("\n ");
-	for (int i = 0; i < size; i++)
-		printf(" %d", i);
-
-	printf("\n");
-	for (int i = 0; i < size; i++) {
-		printf("%d", i);
-		for (int j = 0; j < size; j++) {
-			board[i][j] = '+';
-			printf(" %c", board[i][j]);
-		}
-		printf("\n");
-	}
-}
-
 int main(int argc, char *argv[]) {
 	int server_sock, client_sock, port_no, client_size, n;
 

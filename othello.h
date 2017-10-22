@@ -85,36 +85,34 @@ void initialize_game () {
 }
 
 void generateInitialPieces () {
-	int initialPiecesPosition [] = {28, 29, 36, 37};
-	int size = sizeof(initialPiecesPosition)/sizeof(int);
-	int random;
+	//pieces of matching color should be placed vertically at the start of the game
+	int diagonal1 [] = {28, 37};
+	int diagonal2 [] = {29, 36};
 
-	for (int i = 0; i < size; i++) {
-		random = rand() % 2 + 1;
+	//dictates the location of server and client's initial pieces
+	int random = rand() % 2 + 1; //1 to 2
 
-		if (random == 1) {
-			if (b.p1_pieces_size < 2) {
-				b.p1_pieces_size = b.p1_pieces_size + 1;
-				p1.tileswpieces = realloc(p1.tileswpieces, sizeof(int)*b.p1_pieces_size);
-				p1.tileswpieces [b.p1_pieces_size - 1] = initialPiecesPosition [i];
-				b.p1_tiles [initialPiecesPosition[i]] = true;
-			}
-			else {
-				i = i - 1;
-			}
-		}
-		else if (random == 2) {
-			if (b.p2_pieces_size < 2) {
-				b.p2_pieces_size = b.p2_pieces_size + 1;
-				p2.tileswpieces = realloc(p2.tileswpieces, sizeof(int)*b.p2_pieces_size);
-				p2.tileswpieces [b.p2_pieces_size - 1] = initialPiecesPosition [i];
-				b.p2_tiles [initialPiecesPosition[i]] = true;
-			}
-			else {
-				i = i - 1;
-			}
+	p1.tileswpieces = realloc(p1.tileswpieces, sizeof(int)*2);
+	p2.tileswpieces = realloc(p2.tileswpieces, sizeof(int)*2);
+
+	if (random == 1) {
+		for (int i = 0; i < 2; ++i) {
+			p1.tileswpieces [i] = diagonal1 [i];
+			b.p1_tiles [diagonal1[i]] = true;
+			p2.tileswpieces [i] = diagonal2 [i];
+			b.p2_tiles [diagonal2[i]] = true;
 		}
 	}
+	else {
+		for (int i = 0; i < 2; ++i) {
+			p1.tileswpieces [i] = diagonal2 [i];
+			b.p1_tiles [diagonal2[i]] = true;
+			p2.tileswpieces [i] = diagonal1 [i];
+			b.p2_tiles [diagonal1[i]] = true;
+		}
+	}
+	b.p1_pieces_size = 2;
+	b.p2_pieces_size = 2;
 }
 
 void printboard () {
