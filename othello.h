@@ -8,8 +8,9 @@ typedef struct {
 	//total number of tiles owned by each player
 	int p1_pieces_size;
 	int p2_pieces_size;
-	bool p1_tiles [65];
-	bool p2_tiles [65];
+	bool p1_tiles [65]; //0-64
+	bool p2_tiles [65]; //0-64
+	bool filled_tile [65]; //0-64
 } board;
 
 board b;
@@ -27,7 +28,10 @@ void generateInitialPieces ();
 void printboard ();
 
 void printmsg1 () {
+	printf ("\033[34m\033[1m"); //blue bold
 	printf ("The player who has the most pieces on the board wins.\n");
+	printf ("\033[0m"); //reset color
+	printf("\n");
 }
 
 void initialize_game () {
@@ -40,7 +44,9 @@ void initialize_game () {
 	for (int i = 0; i < 65; i++) {
 		b.p1_tiles [i] = false;
 		b.p2_tiles [i] = false;
+		b.filled_tile [i] = false;
 	}
+	printmsg1 ();
 }
 
 /*
@@ -111,11 +117,56 @@ void printboard () {
 	}
 }
 
-void belongsToP1 () {
-	for (int i = 0; i < b.p1_pieces_size; ++i) {
-
+void update_filled_tiles () {
+	for (int i = 0; i < 64; ++i) {
+		if (b.p1_tiles[i] || b.p2_tiles[i]) {
+			b.filled_tile [i] = true;
+		}
 	}
 }
 
+bool game_over () {
+	update_filled_tiles ();
+	bool over = true;
+
+	for (int i = 1; i < 64; ++i) {
+		if (b.filled_tile[i] == false) {
+			over = false;
+			break;
+		}
+	}
+
+	return over;
+}
+
+bool validmove (int ans) {
+	update_filled_tiles ();
+	bool valid = false;
+
+	if (b.filled_tile[ans] == false) {
+		valid = true;
+	}
+
+	return valid;	
+}
+
+void p1Move (int ans) {
+	b.p1_pieces_size = b.p1_pieces_size + 1;
+	p1.tileswpieces = realloc(p1.tileswpieces, sizeof(int)*b.p1_pieces_size);
+	p1.tileswpieces [b.p1_pieces_size - 1] = ans;
+	b.p1_tiles [ans] = true;
+	b.filled_tile [ans] = true;
+}
+
+void p2Move (int ans) {
+	b.p2_pieces_size = b.p2_pieces_size + 1;
+	p2.tileswpieces = realloc(p2.tileswpieces, sizeof(int)*b.p2_pieces_size);
+	p2.tileswpieces [b.p2_pieces_size - 1] = ans;
+	b.p2_tiles [ans] = true;
+	b.filled_tile [ans] = true;
+}
+
 void fin () {
+	free(p1.tileswpieces);
+	free(p2.tileswpieces);
 }

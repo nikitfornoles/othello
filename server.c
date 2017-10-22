@@ -79,11 +79,120 @@ int main(int argc, char *argv[]) {
 	printf("###### Welcome to OTHELLO ######\n");
 	printf("################################\n");
 	printf("\n");
-	
+
 	initialize_game ();
 	generateInitialPieces ();
 
+	//send positions of player 1's initial tile pieces
+	for (int i = 0; i < 2; i++) {
+		bzero(sbuffer, 256);
+		int a = p1.tileswpieces [i];
+		sprintf (sbuffer, "%d", a);
+
+		n = send(client_sock, sbuffer, sizeof(sbuffer), 0);
+		if (n < 0)
+			die_with_error("Error: send() Failed.");
+	}
+
+	//send positions of player 2's initial tile pieces
+	for (int i = 0; i < 2; i++) {
+		bzero(sbuffer, 256);
+		int a = p2.tileswpieces [i];
+		sprintf (sbuffer, "%d", a);
+
+		n = send(client_sock, sbuffer, sizeof(sbuffer), 0);
+		if (n < 0)
+			die_with_error("Error: send() Failed.");
+	}
+
 	printboard ();
+
+	sleep (1);
+	//system ("clear");
+
+	while (!game_over()) {
+		int ans_client;
+		int ans_server;
+
+		//SERVER'S TURN
+		//-------------------------------------------------------
+		printf("\nEnter the tile number where you will put your piece: ");
+		scanf ("%d", &ans_server);
+
+		while (!validmove(ans_server)) {
+			printf("Not valid. Pick another tile number: ");
+			scanf ("%d", &ans_server);
+		}
+
+		p1Move(ans_server);
+		//system ("clear");
+
+		//inform the opponent of server's move
+		bzero(sbuffer, 256);
+		sprintf (sbuffer, "%d", ans_server);
+
+		n = send(client_sock, sbuffer, sizeof(sbuffer), 0);
+		if (n < 0)
+			die_with_error("Error: send() Failed.");
+
+		//send size of server's pieces on board
+		bzero(sbuffer, 256);
+		int a = b.p1_pieces_size;
+		sprintf (sbuffer, "%d", a);
+
+		n = send(client_sock, sbuffer, sizeof(sbuffer), 0);
+		if (n < 0)
+			die_with_error("Error: send() Failed.");
+
+		//send updated positions of server's tile pieces
+		for (int i = 0; i < b.p1_pieces_size; i++) {
+			bzero(sbuffer, 256);
+			int a = p1.tileswpieces [i];
+			sprintf (sbuffer, "%d", a);
+
+			n = send(client_sock, sbuffer, sizeof(sbuffer), 0);
+			if (n < 0)
+				die_with_error("Error: send() Failed.");
+		}
+
+		printboard ();
+		//-------------------------------------------------------
+
+		//CLIENT'S TURN
+		//-------------------------------------------------------
+		printf("\nOpponent's turn\n");
+
+		//receive info of client's move
+		bzero(rbuffer, 256);
+		n = recv(client_sock, rbuffer, sizeof(rbuffer), 0);
+		if (n < 0) 
+			die_with_error("Error: recv() Failed.");
+		ans_client = atoi (rbuffer);
+		p2Move(ans_client);
+
+		//receive size of client's pieces on board
+		bzero(rbuffer, 256);
+		n = recv(client_sock, rbuffer, sizeof(rbuffer), 0);
+		if (n < 0) 
+			die_with_error("Error: recv() Failed.");
+		b.p2_pieces_size = atoi (rbuffer);
+
+		//receive updated positions of client's tile pieces
+		for (int i = 0; i < b.p2_pieces_size; i++) {
+			bzero(rbuffer, 256);
+			n = recv(client_sock, rbuffer, sizeof(rbuffer), 0);
+			if (n < 0)
+				die_with_error("Error: recv() Failed.");
+			int value = atoi (rbuffer);
+			p2.tileswpieces [i] = value;
+		}
+
+		printboard ();
+		//-------------------------------------------------------
+	}
+
+	//deallocate memory
+	fin ();
 
 	//closing connection
 	close(client_sock);
