@@ -4,6 +4,24 @@
 #include <string.h>
 #include <time.h>
 
+//FUNCTION PROTOTYPES
+//------------------------------------
+void printmsg1 ();
+void setTile2DValues ();
+void initialize_game ();
+void generateInitialPieces ();
+void printboard ();
+void update_filled_tiles ();
+bool game_over ();
+bool validmove (int ans);
+void p1Move (int ans);
+void p2Move (int ans);
+void fin ();
+//------------------------------------
+
+//STRUCTURES
+//------------------------------------------------------------------------------------
+//board
 typedef struct {
 	//total number of tiles owned by each player
 	int p1_pieces_size;
@@ -14,18 +32,22 @@ typedef struct {
 } board;
 
 board b;
-
+//************************************************************************************
+//player
 typedef struct {
-	int *tileswpieces; //location of each player's pieces identified by numbers 1-64
+	int *tileswpieces; //location of each player's pieces. Identified by numbers 1-64
 } player;
 
 player p1, p2;
+//************************************************************************************
+//tile2D
+typedef struct {
+	int row;
+	int col;
+} tile2D;
 
-void initialize_game ();
-void get_p1_pieces_size ();
-void get_p2_pieces_size ();
-void generateInitialPieces ();
-void printboard ();
+tile2D boardTiles [65]; //0-64
+//------------------------------------------------------------------------------------
 
 void printmsg1 () {
 	printf ("\033[34m\033[1m"); //blue bold
@@ -34,7 +56,21 @@ void printmsg1 () {
 	printf("\n");
 }
 
+void setTile2DValues () {
+	int length = 8;
+	
+	for (int i = 0; i < length; ++i) {
+		for (int j = 0; j < length; ++j) {
+			int num = (i*length) + (j+1);
+			boardTiles [num].row = i;
+			boardTiles [num].col = j;
+		}
+	}
+}
+
 void initialize_game () {
+	printmsg1 ();
+	setTile2DValues ();
 	srand(time(NULL));
 	b.p1_pieces_size = 0;
 	b.p2_pieces_size = 0;
@@ -46,18 +82,7 @@ void initialize_game () {
 		b.p2_tiles [i] = false;
 		b.filled_tile [i] = false;
 	}
-	printmsg1 ();
 }
-
-/*
-void get_p1_pieces_size () {
-	b.p1_pieces_size = sizeof(p1.tileswpieces)/sizeof(int);
-}
-
-void get_p2_pieces_size () {
-	b.p2_pieces_size = sizeof(p2.tileswpieces)/sizeof(int);
-}
-*/
 
 void generateInitialPieces () {
 	int initialPiecesPosition [] = {28, 29, 36, 37};
@@ -113,7 +138,9 @@ void printboard () {
 				printf(" ");
 			}
 
-			if (b.p1_tiles[num] || b.p2_tiles[num]) {printf(" "); }
+			if (b.p1_tiles[num] || b.p2_tiles[num]) {
+				printf(" ");
+			}
 		}
 		printf("\n");
 	}
@@ -148,7 +175,6 @@ bool validmove (int ans) {
 	if (b.filled_tile[ans] == false) {
 		valid = true;
 	}
-
 	return valid;	
 }
 
