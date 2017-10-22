@@ -164,24 +164,24 @@ int main(int argc, char *argv[]) {
 		//inform the opponent of client's move
 		bzero(sbuffer, 256);
 		sprintf (sbuffer, "%d", ans_client);
-
 		n = send(client_sock, sbuffer, sizeof(sbuffer), 0);
 		if (n < 0)
 			die_with_error("Error: send() Failed.");
 
 		//send size of client's pieces on board
-		bzero(sbuffer, 256);
-		int a = b.p1_pieces_size;
-		sprintf (sbuffer, "%d", a);
+		int a = b.p2_pieces_size;
 
+		bzero(sbuffer, 256);
+		sprintf (sbuffer, "%d", a);
 		n = send(client_sock, sbuffer, sizeof(sbuffer), 0);
 		if (n < 0)
 			die_with_error("Error: send() Failed.");
 
 		//send updated positions of client's tile pieces
 		for (int i = 0; i < b.p2_pieces_size; i++) {
-			bzero(sbuffer, 256);
 			int a = p2.tileswpieces [i];
+			
+			bzero(sbuffer, 256);
 			sprintf (sbuffer, "%d", a);
 
 			n = send(client_sock, sbuffer, sizeof(sbuffer), 0);
