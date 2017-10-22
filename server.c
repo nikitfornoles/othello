@@ -106,9 +106,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	printboard ();
-
 	sleep (1);
-	//system ("clear");
 
 	while (!game_over()) {
 		int ans_client;
@@ -125,7 +123,6 @@ int main(int argc, char *argv[]) {
 		}
 
 		p1Move(ans_server);
-		//system ("clear");
 
 		//inform the opponent of server's move
 		bzero(sbuffer, 256);

@@ -108,9 +108,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	printboard ();
-
 	sleep (1);
-	//system ("clear");
 
 	while (!game_over()) {
 		int ans_client;
@@ -159,7 +157,6 @@ int main(int argc, char *argv[]) {
 		}
 
 		p2Move(ans_client);
-		//system ("clear");
 
 		//inform the opponent of client's move
 		bzero(sbuffer, 256);
@@ -180,10 +177,9 @@ int main(int argc, char *argv[]) {
 		//send updated positions of client's tile pieces
 		for (int i = 0; i < b.p2_pieces_size; i++) {
 			int a = p2.tileswpieces [i];
-			
+
 			bzero(sbuffer, 256);
 			sprintf (sbuffer, "%d", a);
-
 			n = send(client_sock, sbuffer, sizeof(sbuffer), 0);
 			if (n < 0)
 				die_with_error("Error: send() Failed.");
