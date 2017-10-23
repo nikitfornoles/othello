@@ -5,6 +5,9 @@
 #include <netdb.h>
 #include "othello.h"
 
+#define SERVER 1
+#define CLIENT 2
+
 void die_with_error(char *error_msg) {
 	printf("%s", error_msg);
 	exit(-1);
@@ -131,7 +134,7 @@ int main(int argc, char *argv[]) {
 		printf("\nEnter the tile number where you will put your piece: ");
 		scanf ("%d", &ans_client);
 
-		while (!validmove(ans_client)) {
+		while (!validmove(ans_client, CLIENT)) {
 			printf("Not valid. Pick another tile number: ");
 			scanf ("%d", &ans_client);
 		}
