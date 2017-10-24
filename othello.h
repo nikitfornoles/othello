@@ -13,7 +13,7 @@ void generateInitialPieces ();
 void printboard ();
 void update_filled_tiles ();
 bool game_over ();
-bool validmove (int ans, int playerID);
+bool validmove (int ans);
 void p1Move (int ans);
 void p2Move (int ans);
 void fin ();
@@ -166,59 +166,12 @@ bool game_over () {
 	return over;
 }
 
-bool horizontal (int ans, int num, int playerID) {
-	bool h = false;
-	if (boardTiles[ans].row == boardTiles[num].row) {
-		h = true;
-	}
-	return h;
-}
-
-bool vertical (int ans, int num, int playerID) {
-	bool v = false;
-	if (boardTiles[ans].col == boardTiles[num].col) {
-		v = true;
-	}
-	return v;
-}
-
-bool diagonal (int ans, int num, int playerID) {
-	bool dLeft = false;
-
-	int rowDiff = abs(boardTiles[ans].row - boardTiles[num].row);
-	int colDiff = abs(boardTiles[num].col - boardTiles[ans].col);
-
-	if (rowDiff == colDiff) {
-		dLeft = true;
-	}
-	return dLeft;
-}
-
-bool validmove (int ans, int playerID) {
+bool validmove (int ans) {
 	update_filled_tiles ();
 	bool valid = false;
 
-	//check if the tile is empty
 	if (b.filled_tile[ans] == false) {
-		//check if the move created a straight line
-		if (playerID == 1) {
-			int size = b.p1_pieces_size;
-			for (int i = 0; i < size; ++i) {
-				if (horizontal(ans, p1.tileswpieces[i], playerID) || vertical(ans, p1.tileswpieces[i], playerID)
-					|| diagonal(ans, p1.tileswpieces[i], playerID)) {
-					valid = true;
-				}
-			}
-		}
-		else if (playerID == 2) {
-			int size = b.p2_pieces_size;
-			for (int i = 0; i < size; ++i) {
-				if (horizontal(ans, p2.tileswpieces[i], playerID) || vertical(ans, p2.tileswpieces[i], playerID)
-					|| diagonal(ans, p2.tileswpieces[i], playerID)) {
-					valid = true;
-				}
-			}
-		}
+		valid = true;
 	}
 	return valid;	
 }
