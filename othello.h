@@ -13,6 +13,9 @@ void generateInitialPieces ();
 void printboard ();
 void update_filled_tiles ();
 bool game_over ();
+bool horizontal (int ans, int num, int playerID);
+bool vertical (int ans, int num, int playerID);
+bool diagonal (int ans, int num, int playerID);
 bool validmove (int ans, int playerID);
 void p1Move (int ans);
 void p2Move (int ans);
@@ -190,8 +193,28 @@ bool diagonal (int ans, int num, int playerID) {
 
 	if (rowDiff == colDiff) {
 		dLeft = true;
+		/* checks if the pieces in between are the opponent's pieces and
+		   that there are no empty tiles in between the two given pieces
+		*/
+		bool sandwich = true; //an indicator if the line 'sandwiched' the opponent's pieces
+
+		//if row of ans is located at a higher row on the board
+		if (boardTiles[ans].row < boardTiles[num].row) {
+			//if direction of diagonal is leaning to the left
+			if (boardTiles[ans].col < boardTiles[num].col) {
+				for (int i = (boardTiles[ans].row + 1); i < boardTiles[num].row; ++i) {
+					if (playerID == 1) {
+						//if (getTileNum(boardTiles[])) { /* code */ }
+					}
+				}
+			}
+		}
 	}
 	return dLeft;
+}
+
+int getTileNum (int row, int col) {
+
 }
 
 bool validmove (int ans, int playerID) {

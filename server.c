@@ -110,7 +110,6 @@ int main(int argc, char *argv[]) {
 		//inform the opponent of server's move
 		bzero(sbuffer, 256);
 		sprintf (sbuffer, "%d", ans_server);
-
 		n = send(client_sock, sbuffer, sizeof(sbuffer), 0);
 		if (n < 0)
 			die_with_error("Error: send() Failed.");

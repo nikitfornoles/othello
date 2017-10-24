@@ -149,20 +149,20 @@ int main(int argc, char *argv[]) {
 			die_with_error("Error: send() Failed.");
 
 		//send size of client's pieces on board
-		int a = b.p2_pieces_size;
-
 		bzero(sbuffer, 256);
+		int a = b.p2_pieces_size;
 		sprintf (sbuffer, "%d", a);
+
 		n = send(client_sock, sbuffer, sizeof(sbuffer), 0);
 		if (n < 0)
 			die_with_error("Error: send() Failed.");
 
 		//send updated positions of client's tile pieces
 		for (int i = 0; i < b.p2_pieces_size; i++) {
-			int a = p2.tileswpieces [i];
-
 			bzero(sbuffer, 256);
+			int a = p2.tileswpieces [i];
 			sprintf (sbuffer, "%d", a);
+			
 			n = send(client_sock, sbuffer, sizeof(sbuffer), 0);
 			if (n < 0)
 				die_with_error("Error: send() Failed.");
