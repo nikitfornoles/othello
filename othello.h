@@ -85,9 +85,9 @@ void initialize_game () {
 }
 
 void generateInitialPieces () {
-	//pieces of matching color should be placed diagonally at the start of the game
-	int vertical1 [] = {28, 37};
-	int vertical2 [] = {29, 36};
+	//pieces of matching color should be placed vertically at the start of the game
+	int diagonal1 [] = {28, 37};
+	int diagonal2 [] = {29, 36};
 
 	//dictates the location of server and client's initial pieces
 	int random = rand() % 2 + 1; //1 to 2
@@ -97,18 +97,18 @@ void generateInitialPieces () {
 
 	if (random == 1) {
 		for (int i = 0; i < 2; ++i) {
-			p1.tileswpieces [i] = vertical1 [i];
-			b.p1_tiles [vertical1[i]] = true;
-			p2.tileswpieces [i] = vertical2 [i];
-			b.p2_tiles [vertical2[i]] = true;
+			p1.tileswpieces [i] = diagonal1 [i];
+			b.p1_tiles [diagonal1[i]] = true;
+			p2.tileswpieces [i] = diagonal2 [i];
+			b.p2_tiles [diagonal2[i]] = true;
 		}
 	}
 	else {
 		for (int i = 0; i < 2; ++i) {
-			p1.tileswpieces [i] = vertical2 [i];
-			b.p1_tiles [vertical2[i]] = true;
-			p2.tileswpieces [i] = vertical1 [i];
-			b.p2_tiles [vertical1[i]] = true;
+			p1.tileswpieces [i] = diagonal2 [i];
+			b.p1_tiles [diagonal2[i]] = true;
+			p2.tileswpieces [i] = diagonal1 [i];
+			b.p2_tiles [diagonal1[i]] = true;
 		}
 	}
 	b.p1_pieces_size = 2;
