@@ -183,15 +183,15 @@ bool vertical (int ans, int num, int playerID) {
 }
 
 bool diagonal (int ans, int num, int playerID) {
-	bool dLeft = false;
+	bool d = false;
 
 	int rowDiff = abs(boardTiles[ans].row - boardTiles[num].row);
 	int colDiff = abs(boardTiles[num].col - boardTiles[ans].col);
 
 	if (rowDiff == colDiff) {
-		dLeft = true;
+		d = true;
 	}
-	return dLeft;
+	return d;
 }
 
 bool validmove (int ans, int playerID) {
